@@ -131,7 +131,6 @@ jobs:
               <dependency>
                 <groupId>${{ env.TARGET_GROUP_ID }}</groupId>
                 <artifactId>${{ env.TARGET_ARTIFACT_ID }}</artifactId>
-                <version>${{ env.TARGET_VERSION }}</version>
               </dependency>    
             </dependencies>
             <repositories>
