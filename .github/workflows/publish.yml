@@ -5,12 +5,20 @@ on:
 env:
   GROUP_ID: com.octokat.app
   ARTIFACT_ID: maven-many-versions
-  VERSION: "1.${{ github.run_number }}.0"
   CLASS_NAME: PublishApp
   SETTINGS_FILE: settings.xml
 
 jobs:
   deploy:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        number: [0,1,2,3,4,5,6,7,8,9]
+
+    env:
+      VERSION: "1.${{ github.run_number }}.${{ matrix.number }}"
+
     runs-on: ubuntu-latest
 
     steps:
