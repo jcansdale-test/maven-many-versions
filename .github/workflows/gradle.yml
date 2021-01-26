@@ -12,17 +12,6 @@ env:
   TARGET_CLASS_NAME: PublishApp
 
 jobs:
-  checkout-and-install:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Build app
-        run: gradle build
-
-      - name: Run app
-        run: gradle run
 
   create-and-install:
     runs-on: ubuntu-latest
