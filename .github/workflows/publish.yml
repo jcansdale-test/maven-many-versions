@@ -101,7 +101,7 @@ jobs:
 
     env:
       GROUP_ID: com.octokat.app
-      ARTIFACT_ID: install-octokat-app
+      ARTIFACT_ID: maven-many-versions-consume
       VERSION: 1.4.0
       CLASS_NAME: InstallApp
       TARGET_GROUP_ID: com.octokat.app
