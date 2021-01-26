@@ -1,0 +1,83 @@
+on:
+  push:
+
+env:
+  GROUP_ID: com.octokat.app
+  ARTIFACT_ID: install-octokat-app
+  VERSION: 1.0-SNAPSHOT
+  CLASS_NAME: InstallApp
+  TARGET_GROUP_ID: com.octokat.app
+  TARGET_ARTIFACT_ID: octokat-app
+  TARGET_VERSION: 1.0-SNAPSHOT
+  TARGET_CLASS_NAME: PublishApp
+
+jobs:
+  checkout-and-install:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build app
+        run: gradle build
+
+      - name: Run app
+        run: gradle run
+
+  create-and-install:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Add ${{ env.CLASS_NAME }}.java file
+        run: |
+          SOURCE_PATH=src/main/java/$(echo ${{ env.GROUP_ID }} | tr . /)
+          mkdir -p $SOURCE_PATH
+          cat <<- END > $SOURCE_PATH/${{ env.CLASS_NAME }}.java
+          package ${{ env.GROUP_ID }};
+          import ${{ env.TARGET_GROUP_ID }}.${{ env.TARGET_CLASS_NAME }};
+          public class ${{ env.CLASS_NAME }}
+          {
+              public static void main( String[] args )
+              {
+                  ${{ env.TARGET_CLASS_NAME }}.main( new String[0] );
+              }
+          }
+          END
+      - name: Add build.gradle.kts
+        run: |
+          cat > build.gradle.kts << EOM
+          group = "${{ env.GROUP_ID }}"
+          version = "${{ env.VERSION }}"
+          plugins {
+              application
+          }
+          application {
+              mainClass.set("${{ env.GROUP_ID }}.${{ env.CLASS_NAME }}")
+          }
+          repositories {
+              jcenter()
+              maven {
+                  name = "remote"
+                  url = uri("https://maven.pkg.github.com/${{ github.repository_owner }}/maven-publish")
+                  credentials {
+                      username = "token"
+                      password = System.getenv("GITHUB_TOKEN")
+                  }
+              }
+          }
+          dependencies {
+              compile("${{ env.TARGET_GROUP_ID }}:${{ env.TARGET_ARTIFACT_ID }}:${{ env.TARGET_VERSION }}")
+          }
+          EOM
+      - name: Add settings.gradle.kts
+        run: |
+          cat > settings.gradle.kts << EOM
+          rootProject.name = "${{ env.ARTIFACT_ID }}"
+          EOM
+      - name: Build app
+        run: gradle build
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Run app
+        run: gradle run
