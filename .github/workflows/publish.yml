@@ -106,7 +106,7 @@ jobs:
       CLASS_NAME: InstallApp
       TARGET_GROUP_ID: com.octokat.app
       TARGET_ARTIFACT_ID: maven-many-versions
-      TARGET_VERSION: 1.0-SNAPSHOT
+      TARGET_VERSION: 1.58.7
       TARGET_CLASS_NAME: PublishApp
 
     steps:
