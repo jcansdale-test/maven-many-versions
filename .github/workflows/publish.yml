@@ -158,9 +158,14 @@ jobs:
           }
           END
       - name: Install packages
-        run: mvn install --no-transfer-progress -Dorg.slf4j.simpleLogger.log.org.apache.maven.wagon.providers.http.httpclient.wire=trace
+        run: mvn install --no-transfer-progress
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Exec package
         run: mvn exec:java -D exec.mainClass=${{ env.GROUP_ID }}.${{ env.CLASS_NAME }} --no-transfer-progress
+
+  curl:
+    runs-on: ubuntu-latest
+    steps:
+      - run: $ curl https://maven.pkg.github.com/${{ github.repository }}/com/octokat/app/maven-many-versions/maven-metadata.xml -v -u token:${{ github.token }}
