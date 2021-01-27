@@ -158,7 +158,7 @@ jobs:
           }
           END
       - name: Install packages
-        run: mvn install --no-transfer-progress
+        run: mvn install --no-transfer-progress -Dorg.slf4j.simpleLogger.log.org.apache.maven.wagon.providers.http.httpclient.wire=trace
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
