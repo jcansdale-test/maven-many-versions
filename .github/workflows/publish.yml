@@ -168,4 +168,4 @@ jobs:
   curl:
     runs-on: ubuntu-latest
     steps:
-      - run: $ curl https://maven.pkg.github.com/${{ github.repository }}/com/octokat/app/maven-many-versions/maven-metadata.xml -v -u token:${{ github.token }}
+      - run: curl https://maven.pkg.github.com/${{ github.repository }}/com/octokat/app/maven-many-versions/maven-metadata.xml -v -u token:${{ github.token }}
